@@ -10,7 +10,7 @@ export abstract class Tile {
   }
 
   public abstract isOccupied(): boolean;
-  public abstract getPice(): Piece | null;
+  public abstract getPiece(): Piece | null;
 
   private static createAllPossibleEmptyTiles(): { [i: number]: EmptyTile } {
     let emptyTiles: { [i: number]: EmptyTile } = {};
@@ -36,7 +36,7 @@ export class EmptyTile extends Tile {
     return false;
   }
 
-  public getPice(): null {
+  public getPiece(): null {
     return null;
   }
 }
@@ -49,7 +49,7 @@ export default class OccupiedTile extends Tile {
     this.piece = piece;
   }
 
-  getPice(): Piece {
+  getPiece(): Piece {
     return this.piece;
   }
 

@@ -2,6 +2,8 @@ export default abstract class Alliance {
   abstract getDirection(): number;
   protected abstract _name: string;
   abstract get name(): string;
+  abstract get isWhite(): boolean;
+  abstract get isBlack(): boolean;
 }
 
 export class White extends Alliance {
@@ -13,6 +15,14 @@ export class White extends Alliance {
   public get name(): string {
     return this._name;
   }
+
+  public get isWhite(): boolean {
+    return true;
+  }
+
+  public get isBlack(): boolean {
+    return false;
+  }
 }
 
 export class Black extends Alliance {
@@ -23,5 +33,13 @@ export class Black extends Alliance {
 
   public get name(): string {
     return this._name;
+  }
+
+  public get isWhite(): boolean {
+    return false;
+  }
+
+  public get isBlack(): boolean {
+    return true;
   }
 }

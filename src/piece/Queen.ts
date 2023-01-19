@@ -42,7 +42,7 @@ export default class Queen extends Piece {
           );
         } else {
           // not occupied tile
-          let piece: Piece = tile.getPice();
+          let piece: Piece = tile.getPiece();
           if (piece.getAlliance() == this.alliance.name) break;
           legalMoves.push(
             new AttackMove(board, this, distanceCandidateCoordinates)

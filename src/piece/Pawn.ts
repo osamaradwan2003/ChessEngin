@@ -6,7 +6,7 @@ import Tile from "../board/Tile";
 import Piece from "./Piece";
 
 export default class Pawn extends Piece {
-  private static candidateCoordinates: Array<number> = [8];
+  private static candidateCoordinates: Array<number> = [8, 16, 7, 9];
   constructor(piecePosition: number, alliance: Alliance) {
     super(piecePosition, alliance);
   }
@@ -16,71 +16,46 @@ export default class Pawn extends Piece {
     let candidateDistance: number,
       legalMoves: Move[] = [];
 
-    for (let currCandidate of Pawn.candidateCoordinates) {
+    for (let currCandidateOffset of Pawn.candidateCoordinates) {
       candidateDistance =
-        this.piecePosition + this.alliance.getDirection() + currCandidate;
-      if (
-        !BoardUtils.isValidTileCoordinates(candidateDistance) ||
-        this.Exclusions(this.piecePosition, currCandidate)
-      ) {
-        continue;
-      }
-      let tile: Tile = board.getTile(candidateDistance);
+        this.piecePosition + this.alliance.getDirection() * currCandidateOffset;
 
-      if (!tile.isOccupied() && candidateDistance == 8)
-        // TODO: add new Major Move ( 2 steeps movement)
-        legalMoves.push(new MajorMove(board, this, candidateDistance));
-      else {
-        // Attack moves
-        const piece: Piece = tile.getPice(),
-          alliance: string = piece.getAlliance();
-        if (this.alliance.name != alliance)
-          legalMoves.push(new AttackMove(board, this, candidateDistance));
+      let tile: Tile = board.getTile(candidateDistance);
+      let piece: Piece = tile.getPiece();
+      if (!tile.isOccupied()) {
+        // not occupied tile and none attacked move
+        if (this.noneAttachedMoves(board, currCandidateOffset))
+          legalMoves.push(
+            this.noneAttachedMoves(board, currCandidateOffset) as Move
+          );
+      } else if (
+        tile.isOccupied() &&
+        candidateDistance == 7 &&
+        this.getAlliance() != piece.getAlliance()
+      ) {
+        legalMoves.push(new AttackMove(board, this, currCandidateOffset));
+      } else if (
+        tile.isOccupied() &&
+        candidateDistance == 9 &&
+        this.getAlliance() != piece.getAlliance()
+      ) {
+        legalMoves.push(new AttackMove(board, this, currCandidateOffset));
       }
     }
+
     return legalMoves;
   }
 
-  firstColumnExclusion(currPosition: number, currCandidate: number): boolean {
-    return (
-      BoardUtils.isFirstColumn[currPosition] &&
-      (currCandidate == -17 ||
-        currCandidate == -10 ||
-        currCandidate == 6 ||
-        currCandidate == 15)
-    );
-  }
-
-  secondeColumnExclusion(currPosition: number, currCandidate: number): boolean {
-    return (
-      BoardUtils.isSecondeColumn[currPosition] &&
-      (currCandidate == -10 || currCandidate == 6)
-    );
-  }
-
-  seventhColumnExclusion(currPosition: number, currCandidate: number): boolean {
-    return (
-      BoardUtils.isSeventhColumn[currPosition] &&
-      (currCandidate == 10 || currCandidate == -6)
-    );
-  }
-
-  eighthColumnExclusion(currPosition: number, currCandidate: number): boolean {
-    return (
-      BoardUtils.isEighthColumn[currPosition] &&
-      (currCandidate == 17 ||
-        currCandidate == 10 ||
-        currCandidate == -6 ||
-        currCandidate == -15)
-    );
-  }
-
-  Exclusions(currPosition: number, candidatePosition: number): boolean {
-    return (
-      this.firstColumnExclusion(currPosition, candidatePosition) ||
-      this.secondeColumnExclusion(currPosition, candidatePosition) ||
-      this.seventhColumnExclusion(candidatePosition, candidatePosition) ||
-      this.eighthColumnExclusion(candidatePosition, candidatePosition)
-    );
+  private noneAttachedMoves(
+    board: Board,
+    currCandidate: number
+  ): Move | boolean {
+    if (currCandidate == 8) {
+      return new MajorMove(board, this, currCandidate);
+    } else if (currCandidate == 16 && this.isFirstMove) {
+      // first move (2 steeps)
+      return new MajorMove(board, this, currCandidate);
+    }
+    return false;
   }
 }

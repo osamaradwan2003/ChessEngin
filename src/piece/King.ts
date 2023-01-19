@@ -5,8 +5,10 @@ import Move, { AttackMove, MajorMove } from "../board/Move";
 import Tile from "../board/Tile";
 import Piece from "./Piece";
 
-export default class Knight extends Piece {
-  private static candidateCoordinates: Array<number> = [-17, -15, -10, -6];
+export default class King extends Piece {
+  private static candidateCoordinates: Array<number> = [
+    -9, -7, -8, -1, 1, 7, 8, 9,
+  ];
   constructor(piecePosition: number, alliance: Alliance) {
     super(piecePosition, alliance);
   }
@@ -16,7 +18,7 @@ export default class Knight extends Piece {
     let candidateDistance: number,
       legalMoves: Move[] = [];
 
-    for (let currCandidate of Knight.candidateCoordinates) {
+    for (let currCandidate of King.candidateCoordinates) {
       candidateDistance = this.piecePosition + currCandidate;
       if (
         !BoardUtils.isValidTileCoordinates(candidateDistance) ||
@@ -41,42 +43,20 @@ export default class Knight extends Piece {
   firstColumnExclusion(currPosition: number, currCandidate: number): boolean {
     return (
       BoardUtils.isFirstColumn[currPosition] &&
-      (currCandidate == -17 ||
-        currCandidate == -10 ||
-        currCandidate == 6 ||
-        currCandidate == 15)
-    );
-  }
-
-  secondeColumnExclusion(currPosition: number, currCandidate: number): boolean {
-    return (
-      BoardUtils.isSecondeColumn[currPosition] &&
-      (currCandidate == -10 || currCandidate == 6)
-    );
-  }
-
-  seventhColumnExclusion(currPosition: number, currCandidate: number): boolean {
-    return (
-      BoardUtils.isSeventhColumn[currPosition] &&
-      (currCandidate == 10 || currCandidate == -6)
+      (currCandidate == -1 || currCandidate == -9 || currCandidate == 7)
     );
   }
 
   eighthColumnExclusion(currPosition: number, currCandidate: number): boolean {
     return (
       BoardUtils.isEighthColumn[currPosition] &&
-      (currCandidate == 17 ||
-        currCandidate == 10 ||
-        currCandidate == -6 ||
-        currCandidate == -15)
+      (currCandidate == 1 || currCandidate == 9 || currCandidate == -7)
     );
   }
 
   Exclusions(currPosition: number, candidatePosition: number): boolean {
     return (
       this.firstColumnExclusion(currPosition, candidatePosition) ||
-      this.secondeColumnExclusion(currPosition, candidatePosition) ||
-      this.seventhColumnExclusion(candidatePosition, candidatePosition) ||
       this.eighthColumnExclusion(candidatePosition, candidatePosition)
     );
   }
