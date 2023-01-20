@@ -6,11 +6,13 @@ import Tile from "../board/Tile";
 import Piece from "./Piece";
 
 export default class King extends Piece {
+  protected _name: string;
   private static candidateCoordinates: Array<number> = [
     -9, -7, -8, -1, 1, 7, 8, 9,
   ];
   constructor(piecePosition: number, alliance: Alliance) {
     super(piecePosition, alliance);
+    this._name = alliance.isWhite ? "K" : "k";
   }
 
   //override

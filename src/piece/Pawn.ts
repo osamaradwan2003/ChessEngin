@@ -1,14 +1,15 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
-import BoardUtils from "../board/BoardUtils";
 import Move, { AttackMove, MajorMove } from "../board/Move";
 import Tile from "../board/Tile";
 import Piece from "./Piece";
 
 export default class Pawn extends Piece {
+  protected _name: string;
   private static candidateCoordinates: Array<number> = [8, 16, 7, 9];
   constructor(piecePosition: number, alliance: Alliance) {
     super(piecePosition, alliance);
+    this._name = alliance.isWhite ? "P" : "p";
   }
 
   //override

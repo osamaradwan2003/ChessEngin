@@ -6,9 +6,11 @@ import Tile from "../board/Tile";
 import Piece from "./Piece";
 
 export default class Knight extends Piece {
+  protected _name: string;
   private static candidateCoordinates: Array<number> = [-17, -15, -10, -6];
   constructor(piecePosition: number, alliance: Alliance) {
     super(piecePosition, alliance);
+    this._name = alliance.isWhite ? "N" : "n";
   }
 
   //override

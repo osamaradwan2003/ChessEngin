@@ -4,12 +4,14 @@ import BoardUtils from "../board/BoardUtils";
 import Move from "../board/Move";
 import Tile from "../board/Tile";
 import Piece from "./Piece";
+import Alliance from "../board/Alliance";
 
 export default class Bishop extends Piece {
+  protected _name: string;
   private static candidateCoordinates: Array<number> = [-9, 9, -7, 7];
-
   constructor(piecePosition: number, alliance: Alliance) {
     super(piecePosition, alliance);
+    this._name = alliance.isWhite ? "B" : "b";
   }
 
   public getLegalMoves(board: Board): Move[] {
@@ -40,7 +42,7 @@ export default class Bishop extends Piece {
         } else {
           // not occupied tile
           let piece: Piece = tile.getPiece();
-          if (piece.getAlliance() == this.alliance) break;
+          if (piece.getAlliance() == this.alliance.name) break;
           legalMoves.push(
             new AttackMove(board, this, distanceCandidateCoordinates)
           );
