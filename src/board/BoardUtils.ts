@@ -20,6 +20,6 @@ export default abstract class BoardUtils {
   }
 
   public static isValidTileCoordinates(coordinates: number) {
-    return 0 >= coordinates && coordinates < BoardUtils.TILES_CELLS;
+    return 0 <= coordinates && coordinates < BoardUtils.TILES_CELLS;
   }
 }

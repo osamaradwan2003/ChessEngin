@@ -10,6 +10,9 @@ export default abstract class Move {
     this.piece = piece;
     this.distanceCoordinates = distanceCoordinates;
   }
+  getDestinationCoordinates(): number {
+    return this.piece.position + this.distanceCoordinates;
+  }
 }
 
 export class MajorMove extends Move {
