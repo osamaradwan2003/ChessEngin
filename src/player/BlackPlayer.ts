@@ -1,6 +1,6 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
-import Move from "../board/Move";
+import Move from "../move/Move";
 import Piece from "../piece/Piece";
 import Player from "./Player";
 
@@ -13,14 +13,14 @@ export default class BlackPlayer extends Player {
     super(board, legalMoves, opponentLegalMoves);
   }
 
-  protected getActivePieces(): Piece[] {
+  public getActivePieces(): Piece[] {
     return this._board.getBlackPieces();
   }
 
-  protected getOpponent(): Player {
+  public getOpponent(): Player {
     return this._board.whitePlayer;
   }
-  protected getAlliance(): Alliance {
+  public getAlliance(): Alliance {
     return Board.Alliances.white;
   }
 }

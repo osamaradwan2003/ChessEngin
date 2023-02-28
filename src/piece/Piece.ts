@@ -1,24 +1,28 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
-import Move from "../board/Move";
+import Move from "../move/Move";
 
 export default abstract class Piece {
   protected _isFirstMove: boolean = true;
   protected abstract _name: string;
-  getAlliance(): string {
-    return this.alliance.name;
-  }
+
   protected piecePosition: number;
-  protected alliance: Alliance;
+  protected _alliance: Alliance;
+
+  constructor(piecePosition: number, alliance: Alliance) {
+    this.piecePosition = piecePosition;
+    this._alliance = alliance;
+  }
 
   public get position(): number {
     return this.piecePosition;
   }
+  getAlliance(): string {
+    return this._alliance.name;
+  }
 
-  public abstract getLegalMoves(board: Board): Move[];
-  constructor(piecePosition: number, alliance: Alliance) {
-    this.piecePosition = piecePosition;
-    this.alliance = alliance;
+  public get alliance(): Alliance {
+    return this._alliance;
   }
 
   toString(): string {
@@ -36,4 +40,19 @@ export default abstract class Piece {
   set isFirstMove(value: boolean) {
     this._isFirstMove = value;
   }
+
+  public equals(obj: object): boolean {
+    if (obj instanceof Piece) {
+      return (
+        this.alliance.name == obj.alliance.name &&
+        this.position == obj.position &&
+        this.name == this.name
+      );
+    }
+    return false;
+  }
+
+  public abstract movePiece(position: number, alliance: Alliance): Piece;
+
+  public abstract getLegalMoves(board: Board): Move[];
 }

@@ -6,7 +6,7 @@ import WhitePlayer from "../player/WhitePlayer";
 import Alliance, { Black, White } from "./Alliance";
 import BoardUtils from "./BoardUtils";
 import Builder from "./Builder";
-import Move from "./Move";
+import Move from "../move/Move";
 import Tile from "./Tile";
 
 export default class Board {
@@ -27,17 +27,34 @@ export default class Board {
   //@ts-ignore
   private _blackPlayer: Player;
 
+  private _currPlayer: Player;
+
+  private _whiteLegalMoves: Move[][];
+  private _blackLegalMoves: Move[][];
+
   constructor(builder: Builder) {
     this.builder = builder;
     this.gameBoard = this.createGameBoard();
     this.Alliances = { white: new White(), black: new Black() };
     this.whitePieces = this.getActivePieces(this.Alliances.white);
     this.blackPieces = this.getActivePieces(this.Alliances.black);
-    let whiteLegalMoves: Move[][] = this.getLegalMoves(this.whitePieces);
-    let blackLegalMoves: Move[][] = this.getLegalMoves(this.blackPieces);
-    console.log(whiteLegalMoves, blackLegalMoves);
-    this._whitePlayer = new WhitePlayer(this, whiteLegalMoves, blackLegalMoves);
-    this._blackPlayer = new BlackPlayer(this, whiteLegalMoves, blackLegalMoves);
+    this._whiteLegalMoves = this.getLegalMoves(this.whitePieces);
+    this._blackLegalMoves = this.getLegalMoves(this.blackPieces);
+
+    this._whitePlayer = new WhitePlayer(
+      this,
+      this._whiteLegalMoves,
+      this._blackLegalMoves
+    );
+    this._blackPlayer = new BlackPlayer(
+      this,
+      this._whiteLegalMoves,
+      this._blackLegalMoves
+    );
+    this._currPlayer = this.builder.nextMove.chosePlayer(
+      this.whitePlayer,
+      this.blackPlayer
+    );
   }
 
   public getLegalMoves(activePieces: Piece[]): Move[][] {
@@ -46,6 +63,14 @@ export default class Board {
       legalMoves.push(piece.getLegalMoves(this));
     }
     return legalMoves;
+  }
+
+  public get currPlayer(): Player {
+    return this._currPlayer;
+  }
+
+  public get getAllLegalMove(): Move[] {
+    return this._whiteLegalMoves.flat().concat(this._blackLegalMoves.flat());
   }
 
   getWhitePieces() {

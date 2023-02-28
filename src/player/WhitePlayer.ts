@@ -1,16 +1,10 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
-import Move from "../board/Move";
+import Move from "../move/Move";
 import Piece from "../piece/Piece";
 import Player from "./Player";
 
 export default class WhitePlayer extends Player {
-  protected getOpponent(): Player {
-    return this._board.blackPlayer;
-  }
-  protected getAlliance(): Alliance {
-    return Board.Alliances.black;
-  }
   constructor(
     board: Board,
     legalMoves: Move[][],
@@ -19,7 +13,13 @@ export default class WhitePlayer extends Player {
     super(board, legalMoves, opponentLegalMoves);
   }
 
-  protected getActivePieces(): Piece[] {
+  public getActivePieces(): Piece[] {
     return this._board.getWhitePieces();
+  }
+  public getOpponent(): Player {
+    return this._board.blackPlayer;
+  }
+  public getAlliance(): Alliance {
+    return Board.Alliances.black;
   }
 }

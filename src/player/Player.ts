@@ -1,6 +1,6 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
-import Move from "../board/Move";
+import Move from "../move/Move";
 import Piece from "../piece/Piece";
 import TransitionMove from "./TransitionMove";
 
@@ -70,16 +70,35 @@ export default abstract class Player {
     return this._isInCheck && !this.hasEscapeMove();
   }
 
+  public get king(): Piece {
+    return this._king;
+  }
+
+  public get legalMoves(): Move[][] {
+    return this._legalMoves;
+  }
+
   // TODO: implement this methods below
   public isCastled() {
     return false;
   }
 
   public makMove(move: Move): TransitionMove {
-    return new TransitionMove(this._board, move, this);
+    if (!this.isLegalMove(move)) {
+      return new TransitionMove(this._board, move, MoveStatus.IllegalMove);
+    }
+    const board: Board = move.execute();
+    const attacksOnKing = Player.attacksOnTile(
+      board.currPlayer.getOpponent().king.position,
+      board.currPlayer.legalMoves.flat()
+    );
+    if (!(attacksOnKing.length == 0)) {
+      return new TransitionMove(board, move, MoveStatus.LEAVES_PLAYER_ON_CHECk);
+    }
+    return new TransitionMove(board, move, MoveStatus.isDone);
   }
 
-  protected abstract getActivePieces(): Piece[];
-  protected abstract getOpponent(): Player;
-  protected abstract getAlliance(): Alliance;
+  public abstract getActivePieces(): Piece[];
+  public abstract getOpponent(): Player;
+  public abstract getAlliance(): Alliance;
 }

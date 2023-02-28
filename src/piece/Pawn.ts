@@ -1,6 +1,6 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
-import Move, { AttackMove, MajorMove } from "../board/Move";
+import Move, { AttackMove, MajorMove } from "../move/Move";
 import Tile from "../board/Tile";
 import Piece from "./Piece";
 
@@ -19,7 +19,8 @@ export default class Pawn extends Piece {
 
     for (let currCandidateOffset of Pawn.candidateCoordinates) {
       candidateDistance =
-        this.piecePosition + this.alliance.getDirection() * currCandidateOffset;
+        this.piecePosition +
+        this._alliance.getDirection() * currCandidateOffset;
 
       let tile: Tile = board.getTile(candidateDistance);
       let piece: Piece = tile.getPiece();
@@ -58,5 +59,9 @@ export default class Pawn extends Piece {
       return new MajorMove(board, this, currCandidate);
     }
     return false;
+  }
+
+  public movePiece(position: number, alliance: Alliance): Piece {
+    return new Pawn(position, alliance);
   }
 }

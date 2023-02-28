@@ -1,7 +1,7 @@
-import { AttackMove, MajorMove } from "./../board/Move";
+import { AttackMove, MajorMove } from "../move/Move";
 import Board from "../board/Board";
 import BoardUtils from "../board/BoardUtils";
-import Move from "../board/Move";
+import Move from "../move/Move";
 import Tile from "../board/Tile";
 import Piece from "./Piece";
 import Alliance from "../board/Alliance";
@@ -43,7 +43,7 @@ export default class Rook extends Piece {
         } else {
           // not occupied tile
           let piece: Piece = tile.getPiece();
-          if (piece.getAlliance() == this.alliance.name) break;
+          if (piece.getAlliance() == this._alliance.name) break;
           legalMoves.push(
             new AttackMove(board, this, distanceCandidateCoordinates)
           );
@@ -65,5 +65,9 @@ export default class Rook extends Piece {
     candidateOffset: number
   ): boolean {
     return BoardUtils.isFirstColumn[currPosition] && candidateOffset == 1;
+  }
+
+  public movePiece(position: number, alliance: Alliance): Piece {
+    return new Rook(position, alliance);
   }
 }

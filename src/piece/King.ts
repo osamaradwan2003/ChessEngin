@@ -1,7 +1,7 @@
 import Alliance from "../board/Alliance";
 import Board from "../board/Board";
 import BoardUtils from "../board/BoardUtils";
-import Move, { AttackMove, MajorMove } from "../board/Move";
+import Move, { AttackMove, MajorMove } from "../move/Move";
 import Tile from "../board/Tile";
 import Piece from "./Piece";
 
@@ -35,7 +35,7 @@ export default class King extends Piece {
       else {
         const piece: Piece = tile.getPiece(),
           alliance: string = piece.getAlliance();
-        if (this.alliance.name != alliance)
+        if (this._alliance.name != alliance)
           legalMoves.push(new AttackMove(board, this, candidateDistance));
       }
     }
@@ -61,5 +61,9 @@ export default class King extends Piece {
       this.firstColumnExclusion(currPosition, candidatePosition) ||
       this.eighthColumnExclusion(candidatePosition, candidatePosition)
     );
+  }
+
+  public movePiece(position: number, alliance: Alliance): Piece {
+    return new King(position, alliance);
   }
 }

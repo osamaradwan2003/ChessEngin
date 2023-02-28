@@ -6,11 +6,15 @@ import BoardUtils from "./BoardUtils";
 export default class Builder {
   public boardConfig: Piece[] = new Array<Piece>(BoardUtils.TILES_CELLS);
   // @ts-ignore
-  private nextMove: Alliance;
+  private _nextMove: Alliance;
 
   public setMoveMaker(moveMaker: Alliance): Builder {
-    this.nextMove = moveMaker;
+    this._nextMove = moveMaker;
     return this;
+  }
+
+  public get nextMove(): Alliance {
+    return this._nextMove;
   }
 
   public setPiece(piece: Piece): Builder {
