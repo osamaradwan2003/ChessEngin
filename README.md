@@ -1,4 +1,4 @@
-#Features
+# Features
 - Multiplayer Mode: Play chess against other players online.
 - AI Mode: Challenge the computer with various difficulty levels.
 - Responsive Design: Optimized for desktop use.
